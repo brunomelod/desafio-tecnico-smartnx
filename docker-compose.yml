@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-smartnx
+    environment:
+      POSTGRES_USER: smartnx
+      POSTGRES_PASSWORD: smartnx_secret
+      POSTGRES_DB: smartnx_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: mongo-smartnx
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: smartnx_auth      
+
+  app:
+    build: .
+    container_name: app-smartnx
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_USER: smartnx
+      PG_PASSWORD: smartnx_secret
+      PG_DATABASE: smartnx_db
+      MONGODB_URI: mongodb://mongo:27017/smartnx_auth
+    depends_on:
+      - postgres
+      - mongo
+
+volumes:
+  postgres_data:
+  mongo_data:
