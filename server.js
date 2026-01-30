@@ -1,11 +1,14 @@
-import express from "express";
 import "dotenv/config";
+import app from "./src/app.js";
+import connectDB from "./src/config/mongodb.js"; 
 
+const startServer = async () => {
+  await connectDB();
+  const PORT = process.env.PORT;
 
-const app = express();
+  app.listen(PORT, () => {
+    console.log(`O servidor está rodando na porta ${PORT}`);
+  });
+};
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => {
-  console.log(`O servidor está rodando na porta ${PORT}`);
-});
+startServer();
