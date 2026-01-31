@@ -8,10 +8,6 @@ export const createPost = async (req, res) => {
     if (!title || !content) {
       return res.status(400).json({ error: 'Título e conteúdo são obrigatórios' });
     }
-
-    if (title.length > 255) {
-      return res.status(400).json({ error: 'Título deve ter no máximo 255 caracteres' });
-    }
     
     const result = await postService.createPost({ title, content, userId });
     
@@ -49,10 +45,6 @@ export const updatePost = async (req, res) => {
 
     if (!title && !content) {
       return res.status(400).json({ error: 'Título ou conteúdo são obrigatórios' });
-    }
-
-    if (title.length > 255) {
-      return res.status(400).json({ error: 'Título deve ter no máximo 255 caracteres' });
     }
     
     const result = await postService.updatePost(id, { title, content }, userId);
