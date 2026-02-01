@@ -1,8 +1,8 @@
-import "dotenv/config";
-import app from "./src/app.js";
-import connectDB from "./src/config/mongodb.js"; 
-import { connectDB as connectDBPostgres } from "./src/config/postgres.js";
-import { sequelize } from "./src/models/index.js";
+import 'dotenv/config';
+import app from './src/app.js';
+import connectDB from './src/config/mongodb.js';
+import { connectDB as connectDBPostgres } from './src/config/postgres.js';
+import { sequelize } from './src/models/index.js';
 
 const startServer = async () => {
   await connectDB();
