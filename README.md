@@ -14,6 +14,22 @@ API REST em Node.js com cadastro/login de usuários (MongoDB), CRUD de posts e c
 
 ---
 
+## Estrutura do projeto
+
+```
+server.js              # Entrada da aplicação
+src/
+  app.js               # Express, rotas e middlewares globais
+  config/              # mongodb.js, postgres.js
+  controllers/         # authController, userController, postController, commentController
+  middlewares/        # authMiddlewares.js (validação JWT)
+  models/             # User (Mongoose), Post, Comment (Sequelize), index.js
+  routes/             # authRoutes, userRoutes, postRoutes, commentRoutes
+  services/           # authService, userService, postService, commentService
+```
+
+---
+
 ## Dependências
 
 | Pacote                 | Versão | Uso                                     |
@@ -142,6 +158,24 @@ docker compose down
 | `DELETE` | `/api/comments/:id`   | Excluir comentário                                     | Sim (Bearer) |
 
 Rotas protegidas exigem o header `Authorization: Bearer <token>`.
+
+### Regras de negócio
+
+- **Posts:** apenas o **autor** do post pode atualizar ou excluir esse post.
+- **Comentários:** apenas o **autor** do comentário pode excluir esse comentário.
+- **Criação de post:** `title` e `content` são obrigatórios no body.
+- **Atualização de post:** é necessário enviar ao menos um dos campos `title` ou `content`.
+- **Comentário:** `postId` e `content` são obrigatórios no body.
+
+### Respostas de erro
+
+| Status | Situação |
+|--------|----------|
+| `400` | Campos obrigatórios faltando ou inválidos |
+| `401` | Token ausente, inválido ou expirado |
+| `403` | Tentativa de editar/excluir post ou comentário de outro usuário |
+| `404` | Post ou comentário não encontrado |
+| `500` | Erro interno do servidor |
 
 ---
 
@@ -308,3 +342,6 @@ curl -X DELETE http://localhost:3000/api/posts/1 \
 - ✅ JWT com expiração de 1 hora
 - ✅ Senhas armazenadas com hash bcrypt
 - ✅ Middleware de autenticação validando token em todas as rotas protegidas
+- ✅ Validação de campos obrigatórios em posts e comentários
+- ✅ Apenas o autor pode editar ou excluir seu post; apenas o autor pode excluir seu comentário (ownership)
+- ✅ Tratamento de erros com códigos HTTP adequados (400, 401, 403, 404, 500)
