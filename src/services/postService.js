@@ -24,19 +24,6 @@ class PostService {
     }
   }
 
-  async getPostById(postId) {
-    try {
-      const post = await Post.findByPk(postId);
-      if (!post) {
-        return { success: false, error: 'Post não encontrado' };
-      }
-      return { success: true, data: post };
-    } catch (error) {
-      console.error('Erro ao buscar post', error);
-      return { success: false, error: error.message };
-    }
-  }
-
   async updatePost(postId, data, userId) {
     try {
       const post = await Post.findByPk(postId);

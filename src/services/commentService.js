@@ -18,19 +18,6 @@ class CommentService {
     }
   }
 
-  async getCommentsByPostId(postId) {
-    try {
-      const comments = await Comment.findAll({ 
-        where: { postId },
-        order: [['createdAt', 'DESC']] 
-      });
-      return { success: true, data: comments };
-    } catch (error) {
-      console.error('Erro ao listar comentários:', error);
-      return { success: false, error: error.message };
-    }
-  }
-
   async deleteComment(commentId, userId) {
     try {
       const comment = await Comment.findByPk(commentId);
